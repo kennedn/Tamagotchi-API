@@ -23,4 +23,4 @@ This will run the server on `http://localhost:5000`
 
 If using this for the Pebble Tamagotchi Emulator, with a phone running on the same network as this server, you can just fill in `http://local_ip:5000` using the local IP of the server PC. 
 
-If you want to run this from anywhere you need to handle port forwarding on your server PC and/or use a domain name with a proxy service such as Caddy. Once that is set up you can fill in ´https://domain_name:PORT´ in the server address in the Pebble Tamagotchi Emulator settings.
+If you want to run this from anywhere you need to handle port forwarding on your server PC and/or use a domain name with a proxy service such as Caddy. Once that is set up you can fill in `https://domain_name:PORT` in the server address in the Pebble Tamagotchi Emulator settings.

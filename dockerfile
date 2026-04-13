@@ -7,6 +7,12 @@ RUN npm install
 
 COPY . .
 
+# Install curl (needed for download)
+RUN apt-get update && apt-get install -y curl
+
+# Make script executable
+RUN chmod +x entrypoint.sh
+
 EXPOSE 3535
 
-CMD ["node", "server.js"]
+CMD ["./entrypoint.sh"]

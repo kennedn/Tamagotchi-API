@@ -9,18 +9,18 @@ Download this repository.
 
 CD to the main directory.
 
-´´´
+```
 docker build -t tamagotchi-api .
-´´´
+```
 
-Then replace the ´´[URL HERE]´ with a raw url to a Tamagotchi P1 ROM in usigned_12 format (0xFA2, 0xC87, ...). Someone seems to have done the work for us: [link](https://pastebin.com/raw/iN0pfyr7)
+Then replace the `[URL HERE]` with a raw url to a Tamagotchi P1 ROM in usigned_12 format (0xFA2, 0xC87, ...). Someone seems to have done the work for us: [link](https://pastebin.com/raw/iN0pfyr7)
 
-´´´
+```
 docker run -e PORT=5000 -e PASTE_URL=[URL HERE] -p 5000:5000 tamagotchi-api
-´´´
+```
 
-This will run the server on ´http://localhost:5000´
+This will run the server on `http://localhost:5000`
 
-If using this for the Pebble Tamagotchi Emulator, with a phone running on the same network as this server, you can just fill in ´http://local_ip:5000´ using the local IP of the server PC. 
+If using this for the Pebble Tamagotchi Emulator, with a phone running on the same network as this server, you can just fill in `http://local_ip:5000` using the local IP of the server PC. 
 
 If you want to run this from anywhere you need to handle port forwarding on your server PC and/or use a domain name with a proxy service such as Caddy. Once that is set up you can fill in ´https://domain_name:PORT´ in the server address in the Pebble Tamagotchi Emulator settings.

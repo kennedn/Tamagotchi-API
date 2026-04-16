@@ -13,7 +13,7 @@ CD to the main directory.
 docker build -t tamagotchi-api .
 ```
 
-Then replace the `[URL HERE]` with a raw url to a Tamagotchi P1 ROM in usigned_12 format (0xFA2, 0xC87, ...). Someone seems to have done the work for us: [link](https://pastebin.com/raw/iN0pfyr7)
+Then replace the `[URL HERE]` with a raw url to a Tamagotchi ROM in usigned_12 format (0xFA2, 0xC87, ...). Someone seems to have done the work for us: [P1 link](https://pastebin.com/raw/iN0pfyr7) or [P2 link](https://pastebin.com/raw/TXkwnBZA)
 
 ```
 docker run -e PORT=5000 -e PASTE_URL=[URL HERE] -p 5000:5000 tamagotchi-api

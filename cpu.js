@@ -207,6 +207,8 @@ class state_t {
 		this.cpu_halted = null;
 
         this.memory = null;
+		this.selected_icon = null;
+		this.showing_attention_icon = null;
     }
 }
 
@@ -404,12 +406,14 @@ let prog_timer_rld                          = 0;
 
 let tick_counter                            = 0;
 let ts_freq;
-let speed_ratio                             = 0;
+let speed_ratio                             = 1;
 let ref_ts;
 
 let cpu_halted								= 0;
 let cpu_frequency 							= OSC1_FREQUENCY; // in hz
 let scaled_cycle_accumulator 				= 0;
+
+
 
 let cpu_state = new state_t();
 
@@ -454,6 +458,10 @@ function cpu_get_state() {
     cpu_state.interrupts = interrupts;
 
     cpu_state.memory = memory;
+	
+	cpu_state.selected_icon = selected_icon;
+	cpu_state.showing_attention_icon = showing_attention_icon;
+
     return cpu_state;
 }
 
@@ -488,6 +496,15 @@ function cpu_set_state(state) {
 	halted = state.halted;
     
     memory = state.memory;
+
+	// set so that if we quickly send state back the icons will still be correct
+	selected_icon = state.selected_icon;
+	showing_attention_icon = state.showing_attention_icon;
+
+	// helps button reset properly after loading state
+	hw_set_button(button_t.BTN_LEFT, btn_state_t.BTN_STATE_RELEASED);
+	hw_set_button(button_t.BTN_MIDDLE, btn_state_t.BTN_STATE_RELEASED);
+	hw_set_button(button_t.BTN_RIGHT, btn_state_t.BTN_STATE_RELEASED);
 }
 
 function cpu_get_depth() {

@@ -1,16 +1,7 @@
 #!/bin/sh
 
-echo "Downloading ROM..."
+# ROMs are now fetched per-user at runtime from the `x-rom-paste` request
+# header (see README). An optional PASTE_URL env var can still be set as a
+# fallback ROM for requests that omit that header.
 
-# Download raw paste
-curl -s $PASTE_URL > /app/program_raw.js
-
-# Wrap it with your custom code
-echo "var my_program = [" > /app/rom.js
-cat /app/program_raw.js >> /app/rom.js
-echo "];" >> /app/rom.js
-
-echo "ROM prepared."
-
-# Start your server
 exec node server.js

@@ -4,18 +4,16 @@ const loadScripts = require('./loadScripts');
 const NULL = 0;
 
 class Emulator {
-    constructor(program) {
+    // `romSource` is JS source that defines `var my_program = [ ... ];`
+    constructor(romSource) {
         this.ctx = loadScripts([
-            './rom.js',
             './hal.js',
             './hw.js',
             './cpu.js',
             './tamalib.js'
-        ]);
+        ], romSource);
 
         this.program = this.ctx.my_program;
-
-        this.STEPS_PER_DELAY = 30;
 
         this.ctx.g_hal = this.ctx.hal_t;
         this.ctx.tamalib_register_hal(this.ctx.hal_t);
@@ -36,6 +34,18 @@ class Emulator {
 
     step() {
         this.ctx.tamalib_step();
+    }
+
+    // Virtual wall-clock (microseconds), used by the driver loop to pace stepping
+    // against real time without busy-waiting. See manager.js startLoop.
+    refTs() {
+        return this.ctx.tamalib_get_ref_ts();
+    }
+
+    // Re-anchor the virtual clock to "now". Call this before (re)starting the loop
+    // so a freshly loaded/restored pet doesn't try to replay stale virtual time.
+    syncClock() {
+        this.ctx.tamalib_sync_ref_timestamp();
     }
 }
 

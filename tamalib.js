@@ -14,6 +14,17 @@ const tamalib_refresh_hw = () => {
     cpu_refresh_hw();
 };
 
+/* Virtual wall-clock accessors used by the driver loop for real-time pacing.
+ * Declared as functions (not const) so they attach to the vm global, the same
+ * way tamalib_step / tamalib_get_state are reachable from emulator.js. */
+function tamalib_get_ref_ts() {
+    return cpu_get_ref_ts();
+}
+
+function tamalib_sync_ref_timestamp() {
+    cpu_sync_ref_timestamp();
+}
+
 const tamalib_reset = () => {
     cpu_reset();
 };

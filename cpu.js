@@ -551,6 +551,13 @@ function cpu_sync_ref_timestamp() {
     ref_ts = g_hal.get_timestamp();
 }
 
+/* Current value of the virtual wall-clock (in the same units as
+ * g_hal.get_timestamp()). The driver loop compares this to real time to decide
+ * how long to sleep between bursts of steps. */
+function cpu_get_ref_ts() {
+    return ref_ts;
+}
+
 function get_io(n) {
 	let tmp;
 

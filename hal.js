@@ -48,7 +48,10 @@ var hal_t = {
     * of ~30 us (1/32768) is required for a cycle accurate emulation.
     */
     sleep_until: (ts) => {
-        while((ts - g_hal.get_timestamp()) > 0);
+        /* No-op: real-time pacing is handled by the driver loop (see manager.js),
+         * which steps the CPU in bursts and yields the event loop between them.
+         * Busy-waiting here would pin a core per emulator. `ref_ts` still advances
+         * as a virtual clock inside wait_for_cycles, so timing stays accurate. */
     },
     get_timestamp: () => {
         return Date.now() * 1000; //micro seconds

@@ -35,6 +35,14 @@ When running in Docker, mount a volume at `/app/pets` to keep saves across conta
 
 ## Version Info
 
+Version 1.2.
+
+Thanks to the contributions of @aricodes-oss Tamagotchi API has some major improvements. In their own words:
+
+- Adds a CI workflow for automatically publishing a container image on updates. Both `x86` and `arm64` architectures are built in parallel, then the tags are merged afterwards. I didn't include 32-bit ARM because it tends to inflate build times for little benefit, but it can be added easily if that's desired.
+- Adds multi-user support as identified by the watch token + ROM paste URL headers, with a default `MAX_SESSION `cap of 500. A handful of security checks (SSRF, optional host whitelisting, simplistic validation that content is only numeric values) are wrapped around the ROM fetching since we're now accepting user input for that URL.
+- Adds optional disk-backed persistence for pets, available by mounting a volume at `/app/pets` when running in docker.
+
 Version 1.1.
 
 - Updated to latest version of TamaLIB. This version is only compatible with Tamagotchi Emulator 4 Pebble 1.3.0 or higher.

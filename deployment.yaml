@@ -10,9 +10,9 @@ spec:
         - name: tamagotchi
           image: quay.io/kennedn/tamagotchi-api:latest
           imagePullPolicy: Always
-          env:
-            - name: PORT
-              value: "5000"
+          envFrom:
+            - configMapRef:
+                name: tamagotchi-config
           ports:
             - name: http
               containerPort: 5000

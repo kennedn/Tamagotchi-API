@@ -105,18 +105,18 @@ docker run -d --restart unless-stopped -e PORT=5000 -v tamagotchi-pets:/app/pets
 
 ### Run on Kubernetes
 
-The manifests in `kubernetes/` deploy one replica of the API, a 1 Gi persistent
+The Kubernetes manifests deploy one replica of the API, a 1 Gi persistent
 volume for `/app/pets`, a ClusterIP service, and an ingress for
 `tamagotchi.kennedn.com`:
 
 ```
-kubectl apply -k kubernetes/
+kubectl apply -k .
 ```
 
 The PVC uses the cluster's default StorageClass. Set `storageClassName` in
-`kubernetes/pvc.yaml` if the cluster does not have a default. Configure alerting
-by adding `ALERT_ENDPOINT` to the container environment in
-`kubernetes/deployment.yaml`.
+`pvc.yaml` if the cluster does not have a default. Runtime environment variables
+are configured in the gitignored `config/tamagotchi.env` file. Kustomize generates
+the ConfigMap from that file and loads it into the container with `envFrom`.
 
 
 This will run the server on `http://localhost:5000`

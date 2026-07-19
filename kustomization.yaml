@@ -3,6 +3,10 @@ kind: Kustomization
 namespace: default
 commonLabels:
   app: tamagotchi
+configMapGenerator:
+  - name: tamagotchi-config
+    envs:
+      - config/tamagotchi.env
 resources:
   - pvc.yaml
   - deployment.yaml

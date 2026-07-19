@@ -103,6 +103,21 @@ Pet state is persisted to the `pets/` folder and restored on restart (see [Persi
 docker run -d --restart unless-stopped -e PORT=5000 -v tamagotchi-pets:/app/pets -p 5000:5000 tamagotchi-api
 ```
 
+### Run on Kubernetes
+
+The manifests in `kubernetes/` deploy one replica of the API, a 1 Gi persistent
+volume for `/app/pets`, a ClusterIP service, and an ingress for
+`tamagotchi.kennedn.com`:
+
+```
+kubectl apply -k kubernetes/
+```
+
+The PVC uses the cluster's default StorageClass. Set `storageClassName` in
+`kubernetes/pvc.yaml` if the cluster does not have a default. Configure alerting
+by adding `ALERT_ENDPOINT` to the container environment in
+`kubernetes/deployment.yaml`.
+
 
 This will run the server on `http://localhost:5000`
 

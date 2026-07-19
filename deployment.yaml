@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tamagotchi
+spec:
+  replicas: 1
+  template:
+    spec:
+      containers:
+        - name: tamagotchi
+          image: quay.io/kennedn/tamagotchi-api:latest
+          imagePullPolicy: Always
+          env:
+            - name: PORT
+              value: "5000"
+          ports:
+            - name: http
+              containerPort: 5000
+              protocol: TCP
+          volumeMounts:
+            - name: pets
+              mountPath: /app/pets
+      volumes:
+        - name: pets
+          persistentVolumeClaim:
+            claimName: tamagotchi-pets

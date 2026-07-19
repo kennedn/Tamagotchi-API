@@ -74,9 +74,13 @@ var hal_t = {
         }*/
     },
     set_lcd_icon: (icon, val) => {
-        // Implement this function
         if (icon === 7)
         {
+            // Debounce initialisation of attention icon
+            if (val !== showing_attention_icon)
+            {
+                notifyAttention(val);
+            }
             showing_attention_icon = val;
         }
         else

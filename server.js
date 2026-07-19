@@ -2,6 +2,7 @@ const express = require('express');
 const manager = require('./manager');
 
 const app = express();
+
 app.use(express.json({ limit: '5mb' }));
 
 // Optional fallback ROM used when a request omits the x-rom-paste header.
@@ -20,6 +21,7 @@ function requirePebbleId(req, res) {
 app.get('/state', async (req, res) => {
     const pebbleId = requirePebbleId(req, res);
     if (!pebbleId) return;
+    console.log(`GET /state for ${pebbleId}`);
 
     let session;
     try {
@@ -39,6 +41,7 @@ app.get('/state', async (req, res) => {
 app.post('/state', async (req, res) => {
     const pebbleId = requirePebbleId(req, res);
     if (!pebbleId) return;
+    console.log(`POST /state for ${pebbleId}`);
 
     const pasteUrl = req.get('x-rom-paste') || DEFAULT_PASTE_URL;
     if (!pasteUrl) {

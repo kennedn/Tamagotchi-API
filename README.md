@@ -27,6 +27,18 @@ Because `x-rom-paste` is a client-supplied URL the server fetches, requests targ
 - `ROM_HOST_ALLOWLIST` - comma-separated list of allowed paste hostnames (e.g. `pastebin.com`). When set, only these hosts are fetched, which also closes DNS-rebinding; when unset, any public host is allowed.
 - `MAX_SESSIONS` - cap on the number of concurrently running emulators (default `500`). New ids beyond the cap are rejected so an unbounded stream of distinct ids can't exhaust the host.
 
+### Attention alerts
+
+When the Tamagotchi attention icon turns on, the service sends a JSON alert to
+the endpoint configured with `ALERT_ENDPOINT`. The request body contains the
+fixed message `Tamagotchi needs attention`. Repeated alerts from the same emulator
+are suppressed for one hour by default while the attention icon remains active.
+The cooldown resets when the icon turns off. Configure alerts with these
+environment variables:
+
+- `ALERT_COOLOFF_MS` - minimum time between alerts in milliseconds (default `3600000`)
+- `ALERT_ENDPOINT` - required alert destination URL
+
 ### Persistence
 
 Pet state is saved to a `pets/` folder in the working directory. Each pet is autosaved every 5 minutes (and immediately on `POST /state`, on eviction, and on shutdown), then restored automatically when the server starts again - so background pets survive restarts. To run a fresh instance with no saved pets, delete the `pets/` folder.

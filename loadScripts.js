@@ -1,6 +1,7 @@
 const fs = require('fs');
 const vm = require('vm');
 const path = require('path');
+const logger = require('./logger');
 
 const DEFAULT_ALERT_COOLOFF_MS = 60 * 60 * 1000;
 
@@ -11,10 +12,15 @@ function createAttentionNotifier() {
         ? configuredCooloff
         : DEFAULT_ALERT_COOLOFF_MS;
     let lastSentAt = 0;
+    let cooloffActive = false;
 
     return (showingAttention = true) => {
         if (!showingAttention) {
+            if (cooloffActive) {
+                logger.log('Attention alert cooloff reset because the attention icon turned off');
+            }
             lastSentAt = 0;
+            cooloffActive = false;
             return;
         }
 
@@ -24,8 +30,12 @@ function createAttentionNotifier() {
         }
 
         lastSentAt = now;
+        cooloffActive = true;
+        logger.log(
+            `Attention alert cooloff activated for ${cooloffMs}ms; next alert allowed at ${new Date(now + cooloffMs).toISOString()}`
+        );
         if (!endpoint) {
-            console.error('Cannot send attention alert: ALERT_ENDPOINT is not configured');
+            logger.error('Cannot send attention alert: ALERT_ENDPOINT is not configured');
             return;
         }
 
@@ -38,14 +48,14 @@ function createAttentionNotifier() {
                 throw new Error(`HTTP ${response.status}`);
             }
         }).catch((err) => {
-            console.error(`Failed to send attention alert: ${err.message}`);
+            logger.error(`Failed to send attention alert: ${err.message}`);
         });
     };
 }
 
 function loadScriptsIntoContext(files, preludeCode = null) {
     const context = {
-        console,
+        console: logger,
         notifyAttention: createAttentionNotifier(),
         setTimeout,
         setInterval,

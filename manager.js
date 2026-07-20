@@ -9,6 +9,7 @@ const net = require('net');
 const path = require('path');
 const crypto = require('crypto');
 const Emulator = require('./emulator');
+const logger = require('./logger');
 
 // The driver paces each emulator against its own virtual clock (emu.refTs(),
 // in microseconds). Each wake-up runs steps until the emulator is LOOKAHEAD_US
@@ -152,7 +153,7 @@ function startLoop(session) {
         } catch (err) {
             // A bad save (or otherwise broken state) must not crash the whole
             // process or spin forever throwing - stop just this pet's loop.
-            console.error(`Emulator ${session.pebbleId} loop stopped:`, err.message);
+            logger.error(`Emulator ${session.pebbleId} loop stopped:`, err.message);
             stopLoop(session);
         }
     };
@@ -218,7 +219,7 @@ function saveAll() {
         try {
             saveSession(session);
         } catch (err) {
-            console.error(`Failed to save pet ${session.pebbleId}:`, err.message);
+            logger.error(`Failed to save pet ${session.pebbleId}:`, err.message);
         }
     }
 }
@@ -228,7 +229,7 @@ async function saveAllAsync() {
     await Promise.allSettled(
         [...sessions.values()].map((session) =>
             saveSessionAsync(session).catch((err) => {
-                console.error(`Failed to save pet ${session.pebbleId}:`, err.message);
+                logger.error(`Failed to save pet ${session.pebbleId}:`, err.message);
             })
         )
     );

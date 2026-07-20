@@ -39,6 +39,10 @@ environment variables:
 - `ALERT_COOLOFF_MS` - minimum time between alerts in milliseconds (default `3600000`)
 - `ALERT_ENDPOINT` - required alert destination URL
 
+Application logs are prefixed with an ISO 8601 UTC timestamp. Alert logs also
+record when the cooloff activates, when the next alert becomes eligible, and
+when the attention icon resets the cooloff.
+
 ### Persistence
 
 Pet state is saved to a `pets/` folder in the working directory. Each pet is autosaved every 5 minutes (and immediately on `POST /state`, on eviction, and on shutdown), then restored automatically when the server starts again - so background pets survive restarts. To run a fresh instance with no saved pets, delete the `pets/` folder.

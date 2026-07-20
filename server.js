@@ -1,5 +1,6 @@
 const express = require('express');
 const manager = require('./manager');
+const logger = require('./logger');
 
 const app = express();
 
@@ -21,7 +22,7 @@ function requirePebbleId(req, res) {
 app.get('/state', async (req, res) => {
     const pebbleId = requirePebbleId(req, res);
     if (!pebbleId) return;
-    console.log(`GET /state for ${pebbleId}`);
+    logger.log(`GET /state for ${pebbleId}`);
 
     let session;
     try {
@@ -41,7 +42,7 @@ app.get('/state', async (req, res) => {
 app.post('/state', async (req, res) => {
     const pebbleId = requirePebbleId(req, res);
     if (!pebbleId) return;
-    console.log(`POST /state for ${pebbleId}`);
+    logger.log(`POST /state for ${pebbleId}`);
 
     const pasteUrl = req.get('x-rom-paste') || DEFAULT_PASTE_URL;
     if (!pasteUrl) {
@@ -73,7 +74,7 @@ app.post('/state', async (req, res) => {
 const PORT = process.env.PORT || 3535;
 
 app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Running on port ${PORT}`);
+    logger.log(`Running on port ${PORT}`);
 });
 
 // Persist all pets on shutdown so nothing is lost between the last autosave and exit.

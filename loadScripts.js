@@ -3,46 +3,26 @@ const vm = require('vm');
 const path = require('path');
 const logger = require('./logger');
 
-const DEFAULT_ALERT_COOLOFF_MS = 60 * 60 * 1000;
-
 function createAttentionNotifier() {
     const endpoint = process.env.ALERT_ENDPOINT;
-    const configuredCooloff = Number(process.env.ALERT_COOLOFF_MS);
-    const cooloffMs = Number.isFinite(configuredCooloff) && configuredCooloff >= 0
-        ? configuredCooloff
-        : DEFAULT_ALERT_COOLOFF_MS;
-    let lastSentAt = 0;
-    let cooloffActive = false;
 
     return (showingAttention = true) => {
         if (!showingAttention) {
-            if (cooloffActive) {
-                logger.log('Attention alert cooloff reset because the attention icon turned off');
-            }
-            lastSentAt = 0;
-            cooloffActive = false;
+            logger.info(`Attention alert cleared`);
             return;
         }
 
-        const now = Date.now();
-        if (now - lastSentAt < cooloffMs) {
-            return;
-        }
-
-        lastSentAt = now;
-        cooloffActive = true;
-        logger.log(
-            `Attention alert cooloff activated for ${cooloffMs}ms; next alert allowed at ${new Date(now + cooloffMs).toISOString()}`
-        );
         if (!endpoint) {
             logger.error('Cannot send attention alert: ALERT_ENDPOINT is not configured');
             return;
         }
 
+        logger.info(`Attention alert triggered, sending notification to ${endpoint}`);
+
         void fetch(endpoint, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: 'Tamagotchi needs attention' }),
+            body: JSON.stringify({ message: 'Tamagotchi needs attention', title: 'Tamagotchi', priority: '1' }),
         }).then((response) => {
             if (!response.ok) {
                 throw new Error(`HTTP ${response.status}`);

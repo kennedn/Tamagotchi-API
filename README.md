@@ -31,17 +31,14 @@ Because `x-rom-paste` is a client-supplied URL the server fetches, requests targ
 
 When the Tamagotchi attention icon turns on, the service sends a JSON alert to
 the endpoint configured with `ALERT_ENDPOINT`. The request body contains the
-fixed message `Tamagotchi needs attention`. Repeated alerts from the same emulator
-are suppressed for one hour by default while the attention icon remains active.
-The cooldown resets when the icon turns off. Configure alerts with these
-environment variables:
+fixed message `Tamagotchi needs attention`, the title `Tamagotchi`, and priority
+`1`. A new alert is sent each time the attention icon changes from off to on.
+Configure alerts with this environment variable:
 
-- `ALERT_COOLOFF_MS` - minimum time between alerts in milliseconds (default `3600000`)
 - `ALERT_ENDPOINT` - required alert destination URL
 
-Application logs are prefixed with an ISO 8601 UTC timestamp. Alert logs also
-record when the cooloff activates, when the next alert becomes eligible, and
-when the attention icon resets the cooloff.
+Application logs are prefixed with an ISO 8601 UTC timestamp. Alert logs record
+when an alert is sent, cleared, or fails.
 
 ### Persistence
 
